@@ -12,6 +12,56 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.guest()]),
+    TicketPrice: a.customType({
+      adultPrice: a.float(),
+      adolescentPrice: a.float(),
+      childPrice: a.float(),
+      ticketTitle: a.string(),
+      ticketNumber: a.float()
+    }),
+    DateTimePrice: a.customType({
+      evenDate: a.datetime(),
+      eventDays: a.float(),
+      eventHours: a.float(),
+      eventMinutes: a.float(),
+      eventEndDate: a.datetime(),
+      ticketPriceList: a.ref('TicketPrice').array(),
+    }),
+    Event: a
+    .model({
+      eventName: a.string(),
+      eventDescription: a.string(),
+      email: a.string(),
+      personType: a.boolean(),
+      companyEmail: a.string(),
+      companyName: a.string(),
+      personName: a.string(),
+      eventMainImage: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage2: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage3: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage4: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      dateTimePriceList: a.ref('DateTimePrice').array(),
+      ageRestriction: a.string().array(),
+      categories: a.string().array(),
+      eventAddress: a.string(),
+      location: a.customType({
+        type: a.string(),
+        coordinates: a.float().array()
+      })
+    })
+    .authorization((allow) => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
