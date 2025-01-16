@@ -144,9 +144,6 @@ const indexMapping = {
       id: {
         type: "keyword",
       },
-      done: {
-        type: "boolean",
-      },
       eventName: {
         type: "text",
       },
