@@ -130,7 +130,7 @@ const openSearchIntegrationPipelineRole = new iam.Role(
 
 
 // Define OpenSearch index mappings
-const indexName = "EVENT";
+const indexName = "event";
 
 
 const indexMapping = {
