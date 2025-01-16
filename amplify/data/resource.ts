@@ -62,6 +62,17 @@ const schema = a.schema({
       })
     })
     .authorization((allow) => [allow.guest()]),
+        
+    searchEvents: a
+    .query()
+    .returns(a.ref("Event").array())
+    .authorization((allow) => [allow.guest()])
+    .handler(
+      a.handler.custom({
+        entry: "./searchEventResolver.js",
+        dataSource: "osDataSource",
+      })
+    ),
 });
 
 export type Schema = ClientSchema<typeof schema>;
