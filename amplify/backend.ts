@@ -8,7 +8,7 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import { defineBackend } from '@aws-amplify/backend';
 import { auth } from './auth/resource';
 import { data } from './data/resource';
-import {firstBucket, secondBucket} from './storage/resource'
+import {storage} from './storage/resource'
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -16,8 +16,7 @@ import {firstBucket, secondBucket} from './storage/resource'
 const backend = defineBackend({
   auth,
   data,
-  firstBucket,
-  secondBucket,
+  storage
 });
 
 
@@ -64,9 +63,9 @@ const openSearchDomain = new opensearch.Domain(
 
 
 // Get the S3Bucket ARN
-const s3BucketArn = backend.secondBucket.resources.bucket.bucketArn;
+const s3BucketArn = backend.storage.resources.bucket.bucketArn;
 // Get the S3Bucket Name
-const s3BucketName = backend.secondBucket.resources.bucket.bucketName;
+const s3BucketName = backend.storage.resources.bucket.bucketName;
 
 
 // Create an IAM role for OpenSearch integration
@@ -242,7 +241,7 @@ dynamodb-pipeline:
             start_position: "LATEST"
           export:
             s3_bucket: "${s3BucketName}"
-            s3_region: "${backend.secondBucket.stack.region}"
+            s3_region: "${backend.storage.stack.region}"
             s3_prefix: "${tableName}/"
       aws:
         sts_role_arn: "${openSearchIntegrationPipelineRole.roleArn}"
