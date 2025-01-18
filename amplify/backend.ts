@@ -208,10 +208,10 @@ const indexMapping = {
         type: "nested"
       },
       ageRestriction: {
-        type: "array"
+        type: "text"
       },
       categories: {
-        type: "array"
+        type: "text"
       },
       eventAddress: {
         type: "text"
