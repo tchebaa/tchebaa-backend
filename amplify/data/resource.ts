@@ -20,11 +20,11 @@ const schema = a.schema({
       ticketNumber: a.float()
     }),
     DateTimePrice: a.customType({
-      evenDate: a.datetime(),
+      evenDate: a.string(),
       eventDays: a.float(),
       eventHours: a.float(),
       eventMinutes: a.float(),
-      eventEndDate: a.datetime(),
+      eventEndDate: a.string(),
       ticketPriceArray: a.ref('TicketPrice').array(),
     }),
     Event: a
