@@ -25,7 +25,7 @@ const schema = a.schema({
       eventHours: a.float(),
       eventMinutes: a.float(),
       eventEndDate: a.datetime(),
-      ticketPriceList: a.ref('TicketPrice').array(),
+      ticketPriceArray: a.ref('TicketPrice').array(),
     }),
     Event: a
     .model({
