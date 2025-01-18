@@ -207,18 +207,11 @@ const indexMapping = {
       dateTimePriceList: {
         type: "nested"
       },
-      ageRestriction: {
-        type: "text"
-      },
-      categories: {
-        type: "text"
-      },
+      
       eventAddress: {
         type: "text"
       },
-      location: {
-        type: "geo_shape"
-      }
+      
     },
   },
 };
