@@ -7,11 +7,6 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),
       adolescentPrice: a.float(),
