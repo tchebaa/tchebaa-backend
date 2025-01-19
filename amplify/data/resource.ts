@@ -70,7 +70,7 @@ const schema = a.schema({
     ),
     searchEventsWithFilter: a
     .query()
-    .arguments({ startDate: a.string(), endDate: a.string(), searchTerm: a.string(), categories: a.string().array() })
+    .arguments({ startDate: a.string(), endDate: a.string(), searchTerm: a.string(), categories: a.string().array(), longitude: a.float(), latitude: a.float() })
     .returns(a.ref("Event").array())
     .authorization((allow) => [allow.publicApiKey()])
     .handler(
