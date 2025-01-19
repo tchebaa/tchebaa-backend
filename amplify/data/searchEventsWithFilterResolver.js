@@ -15,6 +15,22 @@ export function request(ctx) {
                 query: {
                     bool: {
     
+                        must: [
+
+                            {
+                            nested: {
+                                path: "dateTimePriceList",
+                                query: {
+                                    bool:{
+                                        must: [
+                                            { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
+                                        ]
+                                        
+                                    }
+                                }
+                            }
+                        }
+                        ],
                         filter: [{
                             geo_distance: {
                             distance: "200km",
@@ -26,17 +42,7 @@ export function request(ctx) {
                         }]
     
                     },
-                    nested: {
-                        path: "dateTimePriceList",
-                        query: {
-                            bool:{
-                                must: [
-                                    { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
-                                ]
-                                
-                            }
-                        }
-                    }
+                    
                 }
             }
         }
