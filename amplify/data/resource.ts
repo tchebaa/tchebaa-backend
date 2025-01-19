@@ -68,6 +68,17 @@ const schema = a.schema({
         dataSource: "osDataSource",
       })
     ),
+    searchEventsWithFilter: a
+    .query()
+    .arguments({ startDate: a.string(), endDate: a.string(), searchTerm: a.string(), categories: a.string().array() })
+    .returns(a.ref("Event").array())
+    .authorization((allow) => [allow.publicApiKey()])
+    .handler(
+      a.handler.custom({
+        entry: "./searchEventsWithFilterResolver.js",
+        dataSource: "osDataSource",
+      })
+    ),
 });
 
 export type Schema = ClientSchema<typeof schema>;

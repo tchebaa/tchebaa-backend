@@ -9,6 +9,22 @@ export function request(ctx) {
   return {
     operation: "GET",
     path: "/event/_search",
+    params: {
+        body: {
+            query: {
+                nested: {
+                    path: "dateTimePriceList",
+                    query: {
+                        bool:{
+                            must: [
+                                { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
     
   };
 }
