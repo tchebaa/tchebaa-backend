@@ -7,57 +7,41 @@ import { util } from "@aws-appsync/utils";
  */
 export function request(ctx) {
 
-    if(ctx.args.categories && ctx.args.categories.length > 0 ) {
-
-        if(ctx.args.searchTerm && ctx.args.searchTerm.length > 1) {
-
-        } else {
-
-        }
-
-
-    } else {
-
-         if(ctx.args.searchTerm && ctx.args.searchTerm.length > 1) {
-
-         } else {
-            return {
-                operation: "GET",
-                path: "/event/_search",
-                params: {
-                    body: {
+    return {
+        operation: "GET",
+        path: "/event/_search",
+        params: {
+            body: {
+                query: {
+                    bool: {
+    
+                        filter: [{
+                            geo_distance: {
+                            distance: "200km",
+                            location: {
+                                lat: ctx.args.latitude,
+                                lon: ctx.args.longitude
+                            }
+                            }
+                        }]
+    
+                    },
+                    nested: {
+                        path: "dateTimePriceList",
                         query: {
-                            bool: {
-            
-                                filter: [{
-                                    "geo_distance": {
-                                    "distance": "200km",
-                                    "location": {
-                                        "lat": ctx.args.latitude,
-                                        "lon": ctx.args.longitude
-                                    }
-                                    }
-                                }]
-            
-                            },
-                            nested: {
-                                path: "dateTimePriceList",
-                                query: {
-                                    bool:{
-                                        must: [
-                                            { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
-                                        ]
-                                        
-                                    }
-                                }
+                            bool:{
+                                must: [
+                                    { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
+                                ]
+                                
                             }
                         }
                     }
                 }
-                
-              };
-         }
-    }
+            }
+        }
+        
+      };
 
 
  
