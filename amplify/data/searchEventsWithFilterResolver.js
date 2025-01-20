@@ -142,55 +142,121 @@ export function request(ctx) {
 
         } else {
 
-            return {
-                operation: "GET",
-                path: "/event/_search",
-                params: {
-                    body: {
-                        query: {
-                            bool: {
+            if(ctx.args.endDate && ctx.args.endDate.length > 0) {
+
+                return {
+                    operation: "GET",
+                    path: "/event/_search",
+                    params: {
+                        body: {
+                            query: {
+                                bool: {
+                
+                                    must: [
             
-                                must: [
-        
-                                    {
-                                    nested: {
-                                        path: "dateTimePriceList",
-                                        query: {
-                                            bool:{
-                                                must: [
-                                                    { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
-                                                ]
-                                                
+                                        {
+                                        nested: {
+                                            path: "dateTimePriceList",
+                                            query: {
+                                                bool:{
+                                                    must: [
+                                                        { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate, "lte": ctx.args.endDate} } }
+                                                    ]
+                                                    
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                
-                                ],
-                                filter: [{
-                                    geo_distance: {
-                                    distance: "200km",
-                                    location: {
-                                        lat: ctx.args.latitude,
-                                        lon: ctx.args.longitude
-                                    }
-                                    }
-                                },
-                                {
-                                    terms: {
-                                        categories: ctx.args.categories,
                                     
-                                    }
-                                }
-                            ]
+                                    ],
+                                    should: [
+                                        {
+                                            multi_match: {
+                                                fields: ["eventName", "eventDescription", "categories"],
+                                                query :  ctx.args.searchTerm,
+                                                fuzziness: "AUTO" 
+                                            }
+                                          }
             
-                            },
-                            
+                                    ],
+                                    filter: [{
+                                        geo_distance: {
+                                        distance: "200km",
+                                        location: {
+                                            lat: ctx.args.latitude,
+                                            lon: ctx.args.longitude
+                                        }
+                                        }
+                                    },
+                                    {
+                                        terms: {
+                                            categories: ctx.args.categories,
+                                        
+                                        }
+                                    }
+                                ]
+                
+                                },
+                                
+                            }
                         }
                     }
-                }
+                    
+                  };
+
+            } else {
+
+                return {
+                    operation: "GET",
+                    path: "/event/_search",
+                    params: {
+                        body: {
+                            query: {
+                                bool: {
                 
-              };
+                                    must: [
+            
+                                        {
+                                        nested: {
+                                            path: "dateTimePriceList",
+                                            query: {
+                                                bool:{
+                                                    must: [
+                                                        { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
+                                                    ]
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    ],
+                                    filter: [{
+                                        geo_distance: {
+                                        distance: "200km",
+                                        location: {
+                                            lat: ctx.args.latitude,
+                                            lon: ctx.args.longitude
+                                        }
+                                        }
+                                    },
+                                    {
+                                        terms: {
+                                            categories: ctx.args.categories,
+                                        
+                                        }
+                                    }
+                                ]
+                
+                                },
+                                
+                            }
+                        }
+                    }
+                    
+                  };
+
+            }
 
         }
 
@@ -315,50 +381,101 @@ export function request(ctx) {
 
         } else {
 
-            return {
-                operation: "GET",
-                path: "/event/_search",
-                params: {
-                    body: {
-                        query: {
-                            bool: {
+            if(ctx.args.endDate && ctx.args.endDate.length > 0) {
+
+                return {
+                    operation: "GET",
+                    path: "/event/_search",
+                    params: {
+                        body: {
+                            query: {
+                                bool: {
+                
+                                    must: [
             
-                                must: [
-        
-                                    {
-                                    nested: {
-                                        path: "dateTimePriceList",
-                                        query: {
-                                            bool:{
-                                                must: [
-                                                    { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
-                                                ]
-                                                
+                                        {
+                                        nested: {
+                                            path: "dateTimePriceList",
+                                            query: {
+                                                bool:{
+                                                    must: [
+                                                        { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate, "lte": ctx.args.endDate} } }
+                                                    ]
+                                                    
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                
-                                ],
-                                filter: [{
-                                    geo_distance: {
-                                    distance: "200km",
-                                    location: {
-                                        lat: ctx.args.latitude,
-                                        lon: ctx.args.longitude
-                                    }
-                                    }
+                                    
+                                    ],
+                                    filter: [{
+                                        geo_distance: {
+                                        distance: "200km",
+                                        location: {
+                                            lat: ctx.args.latitude,
+                                            lon: ctx.args.longitude
+                                        }
+                                        }
+                                    },
+                                    
+                                ]
+                
                                 },
                                 
-                            ]
-            
-                            },
-                            
+                            }
                         }
                     }
-                }
+                    
+                  };
+
+            } else {
+
+                return {
+                    operation: "GET",
+                    path: "/event/_search",
+                    params: {
+                        body: {
+                            query: {
+                                bool: {
                 
-              };
+                                    must: [
+            
+                                        {
+                                        nested: {
+                                            path: "dateTimePriceList",
+                                            query: {
+                                                bool:{
+                                                    must: [
+                                                        { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
+                                                    ]
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    ],
+                                
+                                    filter: [{
+                                        geo_distance: {
+                                        distance: "200km",
+                                        location: {
+                                            lat: ctx.args.latitude,
+                                            lon: ctx.args.longitude
+                                        }
+                                        }
+                                    },
+                                ]
+                
+                                },
+                                
+                            }
+                        }
+                    }
+                    
+                  };
+                
+            }
 
         }
     }
