@@ -142,6 +142,56 @@ export function request(ctx) {
 
         } else {
 
+            return {
+                operation: "GET",
+                path: "/event/_search",
+                params: {
+                    body: {
+                        query: {
+                            bool: {
+            
+                                must: [
+        
+                                    {
+                                    nested: {
+                                        path: "dateTimePriceList",
+                                        query: {
+                                            bool:{
+                                                must: [
+                                                    { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
+                                                ]
+                                                
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                ],
+                                filter: [{
+                                    geo_distance: {
+                                    distance: "200km",
+                                    location: {
+                                        lat: ctx.args.latitude,
+                                        lon: ctx.args.longitude
+                                    }
+                                    }
+                                },
+                                {
+                                    terms: {
+                                        categories: ctx.args.categories,
+                                    
+                                    }
+                                }
+                            ]
+            
+                            },
+                            
+                        }
+                    }
+                }
+                
+              };
+
         }
 
     } else {
