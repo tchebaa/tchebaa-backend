@@ -288,18 +288,15 @@ export function request(ctx) {
                                                 }
                                             }
                                         }
-                                    }
+                                    },
+                                    {
+                                        multi_match: {
+                                            fields: ["eventName", "eventDescription", "categories"],
+                                            query :  ctx.args.searchTerm,
+                                            fuzziness: "AUTO" 
+                                        }
+                                      }
                                     
-                                    ],
-                                    should: [
-                                        {
-                                            multi_match: {
-                                                fields: ["eventName", "eventDescription", "categories"],
-                                                query :  ctx.args.searchTerm,
-                                                fuzziness: "AUTO" 
-                                            }
-                                          }
-            
                                     ],
                                     filter: [{
                                         geo_distance: {
@@ -345,18 +342,15 @@ export function request(ctx) {
                                                 }
                                             }
                                         }
-                                    }
+                                    },
+                                    {
+                                        multi_match: {
+                                            fields: ["eventName", "eventDescription", "categories"],
+                                            query :  ctx.args.searchTerm,
+                                            fuzziness: "AUTO" 
+                                        }
+                                      }
                                     
-                                    ],
-                                    should: [
-                                        {
-                                            multi_match: {
-                                                fields: ["eventName", "eventDescription", "categories"],
-                                                query :  ctx.args.searchTerm,
-                                                fuzziness: "AUTO" 
-                                            }
-                                          }
-            
                                     ],
                                     filter: [{
                                         geo_distance: {
