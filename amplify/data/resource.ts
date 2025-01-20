@@ -56,7 +56,42 @@ const schema = a.schema({
         coordinates: a.float().array()
       })
     })
-    .authorization((allow) => [allow.publicApiKey()]),  
+    .authorization((allow) => [allow.publicApiKey()]),
+    LikedEvent:a.model({
+      userEmail: a.string(),
+      eventName: a.string(),
+      eventDescription: a.string(),
+      email: a.string(),
+      personType: a.boolean(),
+      companyEmail: a.string(),
+      companyName: a.string(),
+      personName: a.string(),
+      eventMainImage: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage2: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage3: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventImage4: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      dateTimePriceList: a.ref('DateTimePrice').array(),
+      ageRestriction: a.string().array(),
+      categories: a.string().array(),
+      eventAddress: a.string(),
+      location: a.customType({
+        type: a.string(),
+        coordinates: a.float().array()
+      })
+      
+    }).authorization((allow) => [allow.publicApiKey()]),  
     searchEvents: a
     .query()
     .returns(a.ref("Event").array())
