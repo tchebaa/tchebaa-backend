@@ -7,6 +7,19 @@ import { util } from "@aws-appsync/utils";
  */
 export function request(ctx) {
 
+    /** 
+
+    if(ctx.args.categories && ctx.args.categories.length > 0) {
+
+    } else {
+
+        if(ctx.args.searchTerm && ctx.args.searchTerm.length > 0) {
+
+        } else {
+
+        }
+    }
+    */
     return {
         operation: "GET",
         path: "/event/_search",
@@ -23,13 +36,24 @@ export function request(ctx) {
                                 query: {
                                     bool:{
                                         must: [
-                                            { range: { "dateTimePriceList.eventEndDate": { "lte": ctx.args.endDate} } }
+                                            { range: { "dateTimePriceList.eventEndDate": { "gte": ctx.args.startDate} } }
                                         ]
                                         
                                     }
                                 }
                             }
                         }
+                        
+                        ],
+                        should: [
+                            {
+                                multi_match: {
+                                    fields: ["eventName", "eventDescription", "categories"],
+                                    query :  ctx.args.searchTerm,
+                                    fuzziness: "AUTO" 
+                                }
+                              }
+
                         ],
                         filter: [{
                             geo_distance: {
@@ -39,7 +63,14 @@ export function request(ctx) {
                                 lon: ctx.args.longitude
                             }
                             }
-                        }]
+                        },
+                        {
+                            terms: {
+                                categories: ctx.args.categories,
+                            
+                            }
+                        }
+                    ]
     
                     },
                     
