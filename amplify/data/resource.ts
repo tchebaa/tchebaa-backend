@@ -56,8 +56,7 @@ const schema = a.schema({
         coordinates: a.float().array()
       })
     })
-    .authorization((allow) => [allow.publicApiKey()]),
-        
+    .authorization((allow) => [allow.publicApiKey()]),  
     searchEvents: a
     .query()
     .returns(a.ref("Event").array())
