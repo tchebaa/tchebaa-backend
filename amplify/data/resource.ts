@@ -92,7 +92,23 @@ const schema = a.schema({
         coordinates: a.float().array()
       })
       
-    }).authorization((allow) => [allow.publicApiKey()]),  
+    }).authorization((allow) => [allow.publicApiKey()]),
+    EventTicket:a.model({
+      eventMainImage: a.customType({
+        aspectRatio: a.string(),
+        url: a.string()
+      }),
+      eventName: a.string(),
+      eventAddress: a.string(),
+      eventDate: a.string(),
+      eventTotalPrice: a.float(),
+      totalTicketNumber: a.float(),
+      adultNumber: a.float(),
+      childNumber: a.float(),
+      adolescentNumber: a.float(),
+      userEmail: a.string(),
+      eventId: a.string()
+    }),  
     searchEvents: a
     .query()
     .returns(a.ref("Event").array())
