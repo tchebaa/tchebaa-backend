@@ -27,7 +27,6 @@ const schema = a.schema({
       eventName: a.string(),
       eventDescription: a.string(),
       email: a.string(),
-      eventId:a.string(),
       personType: a.boolean(),
       companyEmail: a.string(),
       companyName: a.string(),
@@ -60,6 +59,7 @@ const schema = a.schema({
     .authorization((allow) => [allow.publicApiKey()]),
     LikedEvent:a.model({
       userEmail: a.string(),
+      eventId:a.string(),
       eventName: a.string(),
       eventDescription: a.string(),
       email: a.string(),
