@@ -108,7 +108,7 @@ const schema = a.schema({
       adolescentNumber: a.float(),
       userEmail: a.string(),
       eventId: a.string()
-    }),  
+    }).authorization((allow) => [allow.publicApiKey()]),  
     searchEvents: a
     .query()
     .returns(a.ref("Event").array())
