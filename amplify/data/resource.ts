@@ -101,13 +101,20 @@ const schema = a.schema({
       eventName: a.string(),
       eventAddress: a.string(),
       eventDate: a.string(),
+      eventEndDate: a.string(),
       eventTotalPrice: a.float(),
       totalTicketNumber: a.float(),
       adultNumber: a.float(),
       childNumber: a.float(),
       adolescentNumber: a.float(),
       userEmail: a.string(),
-      eventId: a.string()
+      eventId: a.string(),
+      eventDescription: a.string(),
+      ageRestriction: a.string().array(),
+      location: a.customType({
+        type: a.string(),
+        coordinates: a.float().array()
+      })
     }).authorization((allow) => [allow.publicApiKey()]),  
     searchEvents: a
     .query()
