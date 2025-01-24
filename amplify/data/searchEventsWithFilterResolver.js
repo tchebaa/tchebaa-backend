@@ -99,7 +99,7 @@ export function request(ctx) {
                                     },
                                     {
                                         multi_match: {
-                                            fields: ["eventName", "eventDescription", "categories"],
+                                            fields: ["eventName", "eventDescription", "categories", "eventAddress"],
                                             query :  ctx.args.searchTerm,
                                             fuzziness: "AUTO" 
                                         }
@@ -277,7 +277,7 @@ export function request(ctx) {
                                     },
                                     {
                                         multi_match: {
-                                            fields: ["eventName", "eventDescription", "categories"],
+                                            fields: ["eventName", "eventDescription", "categories", "eventAddress"],
                                             query :  ctx.args.searchTerm,
                                             fuzziness: "AUTO" 
                                         }
@@ -331,7 +331,7 @@ export function request(ctx) {
                                     },
                                     {
                                         multi_match: {
-                                            fields: ["eventName", "eventDescription", "categories"],
+                                            fields: ["eventName", "eventDescription", "categories", "eventAddress"],
                                             query :  ctx.args.searchTerm,
                                             fuzziness: "AUTO" 
                                         }
