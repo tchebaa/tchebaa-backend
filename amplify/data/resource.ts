@@ -4,9 +4,12 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 //Schema
 
 const schema = a.schema({
-  PostLimit: a.customType({
+  PostLimit: a.model({
     email: a.string(),
     limit: a.float()
+  }),
+  Admin: a.model({
+    email: a.string()
   }),
     TicketPrice: a.customType({
       adultPrice: a.float(),
@@ -14,7 +17,7 @@ const schema = a.schema({
       childPrice: a.float(),
       ticketTitle: a.string(),
       ticketNumber: a.float(),
-      cancellationPolicy: a.string()
+      
     }),
     DateTimePrice: a.customType({
       eventDate: a.string(),
@@ -113,7 +116,6 @@ const schema = a.schema({
       eventId: a.string(),
       eventDescription: a.string(),
       ageRestriction: a.string().array(),
-      cancellationPolicy: a.string(),
       location: a.customType({
         type: a.string(),
         coordinates: a.float().array()
