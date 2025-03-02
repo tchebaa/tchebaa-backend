@@ -7,10 +7,10 @@ const schema = a.schema({
   PostLimit: a.model({
     email: a.string(),
     limit: a.float()
-  }),
+  }).authorization((allow) => [allow.publicApiKey()]),
   Admin: a.model({
     email: a.string()
-  }),
+  }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),
       adolescentPrice: a.float(),
