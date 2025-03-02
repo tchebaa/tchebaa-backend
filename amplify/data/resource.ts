@@ -11,6 +11,14 @@ const schema = a.schema({
   Admin: a.model({
     email: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
+  EventViewed: a.model({
+    email: a.string(),
+    eventId: a.string(),
+    eventName: a.string()
+  }),
+  OnlineUser: a.model({
+    email: a.string()
+  }),
     TicketPrice: a.customType({
       adultPrice: a.float(),
       adolescentPrice: a.float(),
