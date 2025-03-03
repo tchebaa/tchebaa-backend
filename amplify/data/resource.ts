@@ -120,6 +120,7 @@ const schema = a.schema({
       childNumber: a.float(),
       adolescentNumber: a.float(),
       userEmail: a.string(),
+      organizerEmail: a.string(),
       eventId: a.string(),
       eventDescription: a.string(),
       ageRestriction: a.string().array(),
