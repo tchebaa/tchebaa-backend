@@ -14,7 +14,6 @@ const schema = a.schema({
   EventViewed: a.model({
     email: a.string(),
     eventId: a.string(),
-    eventName: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
   OnlineUser: a.model({
     email: a.string()
