@@ -9,7 +9,8 @@ const schema = a.schema({
     limit: a.float()
   }).authorization((allow) => [allow.publicApiKey()]),
   Admin: a.model({
-    email: a.string()
+    email: a.string(),
+    adminLevel: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
   EventViewed: a.model({
     email: a.string(),
