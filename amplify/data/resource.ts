@@ -4,22 +4,17 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 //Schema
 
 const schema = a.schema({
-  Permissions: a.customType({
-
-    postPermissions: a.boolean(),
-    deletePermissions: a.boolean(),
-    editPermissions: a.boolean(),
-    ticketCancelPermission: a.boolean(),
-    chatPermission: a.boolean()
-
-  }),
   PostLimit: a.model({
     email: a.string(),
     limit: a.float()
   }).authorization((allow) => [allow.publicApiKey()]),
   Admin: a.model({
     email: a.string(),
-    adminPermissions: a.ref('Permissions').array()
+    postPermissions: a.boolean(),
+    deletePermissions: a.boolean(),
+    editPermissions: a.boolean(),
+    ticketCancelPermission: a.boolean(),
+    chatPermission: a.boolean()
   }).authorization((allow) => [allow.publicApiKey()]),
   EventViewed: a.model({
     email: a.string(),
