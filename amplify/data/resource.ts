@@ -16,7 +16,7 @@ const schema = a.schema({
     editEventPermissions: a.boolean(),
     addAdminPermissions: a.boolean(),
     editAdminPermissions: a.boolean(),
-    ticketCancelPermission: a.boolean(),
+    ticketCancelPermissions: a.boolean(),
     deleteAdminPermissions: a.boolean(),
     chatPermissions: a.boolean()
   }).authorization((allow) => [allow.publicApiKey()]),
