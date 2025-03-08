@@ -10,10 +10,13 @@ const schema = a.schema({
   }).authorization((allow) => [allow.publicApiKey()]),
   Admin: a.model({
     email: a.string(),
-    postPermissions: a.boolean(),
-    deletePermissions: a.boolean(),
-    editPermissions: a.boolean(),
+    postEventPermissions: a.boolean(),
+    deleteEventPermissions: a.boolean(),
+    editEventPermissions: a.boolean(),
+    addAdminPermissions: a.boolean(),
+    editAdminPermissions: a.boolean(),
     ticketCancelPermission: a.boolean(),
+    deleteAdminPermissions: a.boolean(),
     chatPermission: a.boolean()
   }).authorization((allow) => [allow.publicApiKey()]),
   EventViewed: a.model({
