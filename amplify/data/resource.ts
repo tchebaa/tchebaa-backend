@@ -23,9 +23,26 @@ const schema = a.schema({
   EventViewed: a.model({
     email: a.string(),
     eventId: a.string(),
+    dateTime: a.string(),
+    locationAdrress: a.string(),
+    location: a.customType({
+      type: a.string(),
+      coordinates: a.float().array()
+    })
   }).authorization((allow) => [allow.publicApiKey()]),
   OnlineUser: a.model({
-    email: a.string()
+    email: a.string(),
+    dateTime: a.string(),
+    locationAdrress: a.string(),
+    location: a.customType({
+      type: a.string(),
+      coordinates: a.float().array()
+    })
+  }).authorization((allow) => [allow.publicApiKey()]),
+  User: a.model({
+    email: a.string(),
+    postPermission: a.boolean(),
+    pushNotificationToken: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),

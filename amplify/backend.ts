@@ -298,7 +298,8 @@ const cfnPipeline = new osis.CfnPipeline(
         logGroup: logGroup.logGroupName,
       },
     },
-  }
+  },
+  
 );
 
 
