@@ -31,22 +31,43 @@ cfnBucket.accelerateConfiguration = {
   accelerationStatus: "Enabled" // 'Suspended' if you want to disable transfer acceleration
 }
 
+//Event table
 const eventTable = backend.data.resources.cfnResources.amplifyDynamoDbTables['Event'];
 
+//User table
 
-// Update table settings
+const usersTable = backend.data.resources.cfnResources.amplifyDynamoDbTables['User'];
+
+
+// Update event table settings
 eventTable.pointInTimeRecoveryEnabled = true;
 
 
+// Update user table settings
+usersTable.pointInTimeRecoveryEnabled = true;
+
+//Event table
 eventTable.streamSpecification = {
   streamViewType: dynamodb.StreamViewType.NEW_IMAGE
 };
 
+//User table
+usersTable.streamSpecification = {
+  streamViewType: dynamodb.StreamViewType.NEW_IMAGE
+};
 
-// Get the DynamoDB table ARN
-const tableArn = backend.data.resources.tables['Event'].tableArn;
-// Get the DynamoDB table name
-const tableName = backend.data.resources.tables['Event'].tableName;
+
+// Get the DynamoDB Event table ARN
+const eventTableArn = backend.data.resources.tables['Event'].tableArn;
+// Get the DynamoDB Event table name
+const eventTableName = backend.data.resources.tables['Event'].tableName;
+
+
+// Get the DynamoDB User table ARN
+const usersTableArn = backend.data.resources.tables['User'].tableArn;
+// Get the DynamoDB User table name
+const usersTableName = backend.data.resources.tables['User'].tableName;
+
 
 const openSearchDomain = new opensearch.Domain(
   backend.data.stack,
@@ -124,7 +145,7 @@ const openSearchIntegrationPipelineRole = new iam.Role(
               "dynamodb:GetRecords",
               "dynamodb:GetShardIterator",
             ],
-            resources: [tableArn, tableArn + "/*"],
+            resources: [eventTableArn, eventTableArn + "/*", usersTableArn, usersTableArn + "/*"],
           }),
         ],
       }),
@@ -139,11 +160,11 @@ const openSearchIntegrationPipelineRole = new iam.Role(
 
 
 
-// Define OpenSearch index mappings
-const indexName = "event";
+// Define OpenSearch Event index mappings
+const eventIndexName = "event";
 
 
-const indexMapping = {
+const eventIndexMapping = {
   settings: {
     number_of_shards: 1,
     number_of_replicas: 0,
@@ -233,26 +254,46 @@ const indexMapping = {
   },
 };
 
+// Define OpenSearch User index mappings
+
+const usersIndexName = "user";
+
+const usersIndexMapping = {
+  settings: {
+    number_of_shards: 1,
+    number_of_replicas: 0,
+  },
+  mappings: {
+    properties: {
+      id: { type: "keyword" },
+      email: { type: "text" },
+      eventPostLimit: { type: "float" },
+      pushNotificationToken: { type: "text" },
+      // Add other user attributes here...
+    }
+  }
+};
 
 
 
 
 
-// OpenSearch template definition
-const openSearchTemplate = `
+
+//Event OpenSearch template definition
+const eventOpenSearchTemplate = `
 version: "2"
 dynamodb-pipeline:
   source:
     dynamodb:
       acknowledgments: true
       tables:
-        - table_arn: "${tableArn}"
+        - table_arn: "${eventTableArn}"
           stream:
             start_position: "LATEST"
           export:
             s3_bucket: "${s3BucketName}"
             s3_region: "${backend.storage.stack.region}"
-            s3_prefix: "${tableName}/"
+            s3_prefix: "${eventTableName}/"
       aws:
         sts_role_arn: "${openSearchIntegrationPipelineRole.roleArn}"
         region: "${backend.data.stack.region}"
@@ -260,10 +301,46 @@ dynamodb-pipeline:
     - opensearch:
         hosts:
           - "https://${openSearchDomain.domainEndpoint}"
-        index: "${indexName}"
+        index: "${eventIndexName}"
         index_type: "custom"
         template_content: |
-          ${JSON.stringify(indexMapping)}
+          ${JSON.stringify(eventIndexMapping)}
+        document_id: '\${getMetadata("primary_key")}'
+        action: '\${getMetadata("opensearch_action")}'
+        document_version: '\${getMetadata("document_version")}'
+        document_version_type: "external"
+        bulk_size: 4
+        aws:
+          sts_role_arn: "${openSearchIntegrationPipelineRole.roleArn}"
+          region: "${backend.data.stack.region}"
+`;
+
+//User OpenSearch template definition
+const usersOpenSearchTemplate = `
+version: "2"
+dynamodb-pipeline:
+  source:
+    dynamodb:
+      acknowledgments: true
+      tables:
+        - table_arn: "${usersTableArn}"
+          stream:
+            start_position: "LATEST"
+          export:
+            s3_bucket: "${s3BucketName}"
+            s3_region: "${backend.storage.stack.region}"
+            s3_prefix: "${usersTableName}/"
+      aws:
+        sts_role_arn: "${openSearchIntegrationPipelineRole.roleArn}"
+        region: "${backend.data.stack.region}"
+  sink:
+    - opensearch:
+        hosts:
+          - "https://${openSearchDomain.domainEndpoint}"
+        index: "${usersIndexName}"
+        index_type: "custom"
+        template_content: |
+          ${JSON.stringify(usersIndexMapping)}
         document_id: '\${getMetadata("primary_key")}'
         action: '\${getMetadata("opensearch_action")}'
         document_version: '\${getMetadata("document_version")}'
@@ -276,30 +353,58 @@ dynamodb-pipeline:
 
 
 
-// Create a CloudWatch log group
-const logGroup = new logs.LogGroup(backend.data.stack, "LogGroup", {
-  logGroupName: "/aws/vendedlogs/OpenSearchService/pipelines/1",
+
+// Create an Event CloudWatch log group
+const eventsLogGroup = new logs.LogGroup(backend.data.stack, "LogGroup", {
+  logGroupName: "/aws/vendedlogs/OpenSearchService/pipelines/events",
+  removalPolicy: RemovalPolicy.DESTROY,
+});
+
+// Create a User CloudWatch log group
+
+const usersLogGroup = new logs.LogGroup(backend.data.stack, "UsersLogGroup", {
+  logGroupName: "/aws/vendedlogs/OpenSearchService/pipelines/users",
   removalPolicy: RemovalPolicy.DESTROY,
 });
 
 
-// Create an OpenSearch Integration Service pipeline
-const cfnPipeline = new osis.CfnPipeline(
+// Create an Event OpenSearch Integration Service pipeline
+const eventsPipeline = new osis.CfnPipeline(
   backend.data.stack,
-  "OpenSearchIntegrationPipeline",
+  "EventOpenSearchIntegrationPipeline",
   {
     maxUnits: 4,
     minUnits: 1,
-    pipelineConfigurationBody: openSearchTemplate,
-    pipelineName: "dynamodb-integration-2",
+    pipelineConfigurationBody: eventOpenSearchTemplate,
+    pipelineName: "dynamodb-events-pipeline",
     logPublishingOptions: {
       isLoggingEnabled: true,
       cloudWatchLogDestination: {
-        logGroup: logGroup.logGroupName,
+        logGroup: eventsLogGroup.logGroupName,
       },
     },
   },
   
+);
+
+// Create a User OpenSearch Integration Service pipeline
+
+
+const usersPipeline = new osis.CfnPipeline(
+  backend.data.stack,
+  "UsersOpenSearchIntegrationPipeline",
+  {
+    maxUnits: 4,
+    minUnits: 1,
+    pipelineConfigurationBody: usersOpenSearchTemplate,
+    pipelineName: "dynamodb-users-pipeline",
+    logPublishingOptions: {
+      isLoggingEnabled: true,
+      cloudWatchLogDestination: {
+        logGroup: usersLogGroup.logGroupName,
+      },
+    },
+  }
 );
 
 
