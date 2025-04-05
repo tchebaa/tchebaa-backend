@@ -24,7 +24,7 @@ const schema = a.schema({
     email: a.string(),
     eventId: a.string(),
     dateTime: a.string(),
-    locationAddress: a.string(),
+    locationAdrress: a.string(),
     location: a.customType({
       type: a.string(),
       coordinates: a.float().array()
@@ -33,7 +33,7 @@ const schema = a.schema({
   OnlineUser: a.model({
     email: a.string(),
     dateTime: a.string(),
-    locationAddress: a.string(),
+    locationAdrress: a.string(),
     location: a.customType({
       type: a.string(),
       coordinates: a.float().array()
@@ -41,8 +41,8 @@ const schema = a.schema({
   }).authorization((allow) => [allow.publicApiKey()]),
   User: a.model({
     email: a.string(),
-    pushNotificationToken: a.string(),
-    eventPostLimit: a.float()
+    postPermission: a.boolean(),
+    pushNotificationToken: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),
@@ -157,7 +157,6 @@ const schema = a.schema({
     }).authorization((allow) => [allow.publicApiKey()]),  
     searchEvents: a
     .query()
-    .arguments({ startDate: a.string(), endDate: a.string(), searchTerm: a.string(), categories: a.string().array(), longitude: a.float(), latitude: a.float() })
     .returns(a.ref("Event").array())
     .authorization((allow) => [allow.publicApiKey()])
     .handler(
@@ -174,17 +173,6 @@ const schema = a.schema({
     .handler(
       a.handler.custom({
         entry: "./searchEventsWithFilterResolver.js",
-        dataSource: "osDataSource",
-      })
-    ),
-    searchUserWithEmail: a
-    .query()
-    .arguments({ email: a.string() })
-    .returns(a.ref("User").array())
-    .authorization((allow) => [allow.publicApiKey()])
-    .handler(
-      a.handler.custom({
-        entry: "./searchUserWithEmailResolver.js",
         dataSource: "osDataSource",
       })
     ),
