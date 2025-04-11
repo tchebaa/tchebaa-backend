@@ -102,7 +102,6 @@ const schema = a.schema({
       eventName: a.string(),
       eventDescription: a.string(),
       email: a.string(),
-      sponsored: a.boolean(),
       personType: a.boolean(),
       companyEmail: a.string(),
       companyName: a.string(),
