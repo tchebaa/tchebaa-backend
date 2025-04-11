@@ -41,7 +41,7 @@ const schema = a.schema({
   }).authorization((allow) => [allow.publicApiKey()]),
   User: a.model({
     email: a.string(),
-    postPermission: a.boolean(),
+    postEventLimit: a.float(),
     pushNotificationToken: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
@@ -69,6 +69,7 @@ const schema = a.schema({
       companyEmail: a.string(),
       companyName: a.string(),
       personName: a.string(),
+      sponsored: a.boolean(),
       eventMainImage: a.customType({
         aspectRatio: a.string(),
         url: a.string()
@@ -101,6 +102,7 @@ const schema = a.schema({
       eventName: a.string(),
       eventDescription: a.string(),
       email: a.string(),
+      sponsored: a.boolean(),
       personType: a.boolean(),
       companyEmail: a.string(),
       companyName: a.string(),
