@@ -19,7 +19,7 @@ const schema = a.schema({
   EventViewed: a.model({
     email: a.string(),
     eventId: a.string(),
-    locationAdrress: a.string(),
+    locationAddress: a.string(),
     location: a.customType({
       type: a.string(),
       coordinates: a.float().array()
@@ -27,7 +27,7 @@ const schema = a.schema({
   }).authorization((allow) => [allow.publicApiKey()]),
   OnlineUser: a.model({
     email: a.string(),
-    locationAdrress: a.string(),
+    locationAddress: a.string(),
     location: a.customType({
       type: a.string(),
       coordinates: a.float().array()
