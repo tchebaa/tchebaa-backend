@@ -65,6 +65,7 @@ const schema = a.schema({
       companyEmail: a.string(),
       companyName: a.string(),
       personName: a.string(),
+      sponsored: a.boolean(),
       eventMainImage: a.customType({
         aspectRatio: a.string(),
         url: a.string()
@@ -101,6 +102,7 @@ const schema = a.schema({
       companyEmail: a.string(),
       companyName: a.string(),
       personName: a.string(),
+      sponsored: a.boolean(),
       eventMainImage: a.customType({
         aspectRatio: a.string(),
         url: a.string()
