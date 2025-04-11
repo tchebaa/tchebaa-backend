@@ -4,10 +4,6 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 //Schema
 
 const schema = a.schema({
-  PostLimit: a.model({
-    email: a.string(),
-    limit: a.float()
-  }).authorization((allow) => [allow.publicApiKey()]),
   Admin: a.model({
     email: a.string(),
     adminName: a.string(),
@@ -69,7 +65,6 @@ const schema = a.schema({
       companyEmail: a.string(),
       companyName: a.string(),
       personName: a.string(),
-      sponsored: a.boolean(),
       eventMainImage: a.customType({
         aspectRatio: a.string(),
         url: a.string()
