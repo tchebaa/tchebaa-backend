@@ -7,7 +7,7 @@ import { util } from "@aws-appsync/utils";
  */
 export function request(ctx) {
 
-    const { args } = ctx;
+  const { args } = ctx;
   const must = [];
   const filter = [];
 

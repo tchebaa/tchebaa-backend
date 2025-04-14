@@ -127,6 +127,15 @@ const schema = a.schema({
       })
       
     }).authorization((allow) => [allow.publicApiKey()]),
+    Conversation:a.model({
+      participants: a.string().array()
+    }).authorization((allow) => [allow.publicApiKey()]),
+    Message:a.model({
+      sender: a.string(),
+      conversationId: a.string(),
+      content: a.string(),
+      status: a.string()
+    }).authorization((allow) => [allow.publicApiKey()]),  
     EventTicket:a.model({
       eventMainImage: a.customType({
         aspectRatio: a.string(),
@@ -151,16 +160,6 @@ const schema = a.schema({
         coordinates: a.float().array()
       })
     }).authorization((allow) => [allow.publicApiKey()]),  
-    searchEvents: a
-    .query()
-    .returns(a.ref("Event").array())
-    .authorization((allow) => [allow.publicApiKey()])
-    .handler(
-      a.handler.custom({
-        entry: "./searchEventResolver.js",
-        dataSource: "osDataSource",
-      })
-    ),
     searchEventsWithFilter: a
     .query()
     .arguments({ startDate: a.string(), endDate: a.string(), searchTerm: a.string(), categories: a.string().array(), longitude: a.float(), latitude: a.float() })
