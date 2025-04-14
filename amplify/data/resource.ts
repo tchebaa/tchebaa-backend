@@ -128,7 +128,8 @@ const schema = a.schema({
       
     }).authorization((allow) => [allow.publicApiKey()]),
     Conversation:a.model({
-      participants: a.string().array()
+      participants: a.string().array(),
+      lastMessage: a.string()
     }).authorization((allow) => [allow.publicApiKey()]),
     Message:a.model({
       sender: a.string(),
