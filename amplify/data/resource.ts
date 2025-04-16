@@ -36,7 +36,8 @@ const schema = a.schema({
   User: a.model({
     email: a.string(),
     postEventLimit: a.float(),
-    pushNotificationToken: a.string()
+    pushNotificationToken: a.string(),
+    name: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),
@@ -156,6 +157,8 @@ const schema = a.schema({
       eventId: a.string(),
       eventDescription: a.string(),
       ageRestriction: a.string().array(),
+      ticketsStatus: a.string(),
+      refunded: a.boolean(),
       location: a.customType({
         type: a.string(),
         coordinates: a.float().array()
