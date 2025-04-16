@@ -37,7 +37,8 @@ const schema = a.schema({
     email: a.string(),
     postEventLimit: a.float(),
     pushNotificationToken: a.string(),
-    name: a.string()
+    name: a.string(),
+    pushNotificationEnabled: a.boolean()
   }).authorization((allow) => [allow.publicApiKey()]),
     TicketPrice: a.customType({
       adultPrice: a.float(),
